@@ -1,8 +1,9 @@
-﻿<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark light" />
   <title>Antonio Egidio Neto — Desenvolvedor Full Stack</title>
   <meta name="description" content="Desenvolvedor Full Stack — Portfólio, projetos e redes sociais." />
   <meta property="og:title" content="Antonio Egidio Neto — Desenvolvedor Full Stack" />
@@ -18,9 +19,18 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
+  <!-- Prevent flash of wrong theme -->
+  <script>
+    (function() {
+      var saved = localStorage.getItem('theme');
+      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+    })();
+  </script>
+
   <style>
     /* ============================================
-       CSS VARIABLES
+       CSS VARIABLES — DARK (default)
     ============================================ */
     :root {
       --font-main: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -50,7 +60,72 @@
       --shadow-glow: 0 0 35px rgba(47, 129, 247, 0.12);
       --glass-bg: rgba(13, 17, 23, 0.85);
       --nav-height: 70px;
+      --mobile-nav-bg: rgba(8, 11, 18, 0.96);
+      --particle-r: 47; --particle-g: 129; --particle-b: 247;
     }
+
+    /* ============================================
+       CSS VARIABLES — LIGHT
+    ============================================ */
+    [data-theme="light"] {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f6f8fa;
+      --bg-tertiary: #eaeef2;
+      --bg-card: rgba(0, 0, 0, 0.02);
+      --bg-card-hover: rgba(0, 0, 0, 0.05);
+      --border-color: rgba(0, 0, 0, 0.08);
+      --border-hover: rgba(0, 0, 0, 0.16);
+      --text-primary: #1f2328;
+      --text-secondary: #656d76;
+      --text-tertiary: #8b949e;
+      --accent-1: #0969da;
+      --accent-2: #bf5700;
+      --accent-3: #1a7f37;
+      --glow-1: rgba(9, 105, 218, 0.12);
+      --glow-2: rgba(191, 87, 0, 0.1);
+      --glow-3: rgba(26, 127, 55, 0.08);
+      --gradient-hero: linear-gradient(160deg, #0969da 0%, #bf5700 55%, #1a7f37 100%);
+      --gradient-card: linear-gradient(160deg, rgba(9, 105, 218, 0.06), rgba(191, 87, 0, 0.03));
+      --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.06);
+      --shadow-glow: 0 0 20px rgba(9, 105, 218, 0.06);
+      --glass-bg: rgba(255, 255, 255, 0.9);
+      --mobile-nav-bg: rgba(255, 255, 255, 0.96);
+      --particle-r: 9; --particle-g: 105; --particle-b: 218;
+    }
+
+    [data-theme="light"] .navbar.scrolled {
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    [data-theme="light"] .orb { opacity: 0.12; }
+
+    [data-theme="light"] .section-label {
+      background: rgba(26, 127, 55, 0.05);
+      border-color: rgba(26, 127, 55, 0.12);
+    }
+
+    [data-theme="light"] .tech-badge { border-left-color: #0969da; }
+    [data-theme="light"] .tech-badge:hover { background: rgba(191, 87, 0, 0.05); }
+
+    [data-theme="light"] .tab-btn.active { background: rgba(9, 105, 218, 0.07); }
+    [data-theme="light"] .tab-btn:hover:not(.active) { background: rgba(191, 87, 0, 0.04); }
+
+    [data-theme="light"] .project-card-tech span {
+      background: rgba(9, 105, 218, 0.05);
+      border-color: rgba(9, 105, 218, 0.1);
+    }
+
+    [data-theme="light"] .project-card-image { border-bottom-color: #0969da; }
+    [data-theme="light"] .project-card:nth-child(even) .project-card-image { border-bottom-color: #bf5700; }
+    [data-theme="light"] .project-card:nth-child(3n) .project-card-image { border-bottom-color: #1a7f37; }
+    [data-theme="light"] .project-card-image::after { background: linear-gradient(transparent, rgba(234, 238, 242, 0.4)); }
+
+    [data-theme="light"] .contact-card-icon.github { background: rgba(9, 105, 218, 0.07); color: #0969da; }
+    [data-theme="light"] .contact-card-icon.instagram { background: rgba(191, 87, 0, 0.07); color: #bf5700; }
+    [data-theme="light"] .contact-card-icon.repos { background: rgba(26, 127, 55, 0.07); color: #1a7f37; }
+
+    [data-theme="light"] .skill-bar { background: rgba(0, 0, 0, 0.06); }
 
     /* ============================================
        RESET & BASE
@@ -71,9 +146,44 @@
       background: var(--bg-primary);
       color: var(--text-primary);
       overflow-x: hidden;
+      transition: background 0.4s ease, color 0.4s ease;
     }
 
     a { text-decoration: none; color: inherit; }
+
+    /* ============================================
+       ACCESSIBILITY: SKIP LINK & SR-ONLY
+    ============================================ */
+    .skip-link {
+      position: fixed;
+      top: -100px;
+      left: 16px;
+      z-index: 300;
+      padding: 12px 24px;
+      background: var(--accent-1);
+      color: #fff;
+      border-radius: 0 0 10px 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: top 0.3s ease;
+      text-decoration: none;
+    }
+
+    .skip-link:focus {
+      top: 0;
+      outline: 2px solid var(--accent-2);
+      outline-offset: 2px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
 
     /* ============================================
        CANVAS BACKGROUND
@@ -104,6 +214,7 @@
       filter: blur(100px);
       opacity: 0.35;
       animation: orbFloat 20s ease-in-out infinite;
+      transition: opacity 0.5s ease;
     }
 
     .orb-1 { width: 600px; height: 600px; background: var(--glow-1); top: -200px; left: -150px; }
@@ -203,6 +314,116 @@
     .nav-links a:hover { color: var(--text-primary); }
     .nav-links a:hover::after { width: 100%; }
 
+    /* ============================================
+       NAV CONTROLS (theme + lang)
+    ============================================ */
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .theme-toggle {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+      backdrop-filter: blur(10px);
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent-2);
+      color: var(--accent-2);
+      transform: scale(1.05);
+    }
+
+    .theme-toggle svg { width: 18px; height: 18px; }
+    [data-theme="dark"] .theme-icon-light { display: none; }
+    [data-theme="light"] .theme-icon-dark { display: none; }
+
+    .lang-selector { position: relative; }
+
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 500;
+      transition: all var(--transition);
+      font-family: var(--font-main);
+      backdrop-filter: blur(10px);
+    }
+
+    .lang-btn:hover {
+      border-color: var(--accent-1);
+      color: var(--text-primary);
+    }
+
+    .lang-flag { font-size: 1.1rem; line-height: 1; }
+
+    .lang-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 6px;
+      min-width: 160px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: all var(--transition);
+      z-index: 200;
+      box-shadow: var(--shadow-card);
+    }
+
+    .lang-dropdown.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 10px 14px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-family: var(--font-main);
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all var(--transition);
+    }
+
+    .lang-option:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    .lang-option.active {
+      color: var(--accent-1);
+      font-weight: 600;
+    }
+
     .nav-toggle {
       display: none;
       flex-direction: column;
@@ -289,7 +510,7 @@
       line-height: 1.8;
       color: var(--text-secondary);
       max-width: 650px;
-      margin: 0 auto 36px;
+      margin: 0 0 36px;
       opacity: 0;
       animation: fadeInUp 0.8s ease-out 0.8s forwards;
     }
@@ -363,7 +584,7 @@
     .btn-primary:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 28px var(--glow-1);
-      background: #4793f8;
+      filter: brightness(1.15);
     }
 
     .btn-secondary {
@@ -511,11 +732,6 @@
 
     @keyframes ringRotate {
       to { transform: rotate(360deg); }
-    }
-
-    @keyframes ringPulse {
-      0%, 100% { opacity: 0.7; }
-      50% { opacity: 1; }
     }
 
     .about-avatar {
@@ -689,13 +905,8 @@
       border-bottom: 3px solid var(--accent-1);
     }
 
-    .project-card:nth-child(even) .project-card-image {
-      border-bottom-color: var(--accent-2);
-    }
-
-    .project-card:nth-child(3n) .project-card-image {
-      border-bottom-color: var(--accent-3);
-    }
+    .project-card:nth-child(even) .project-card-image { border-bottom-color: var(--accent-2); }
+    .project-card:nth-child(3n) .project-card-image { border-bottom-color: var(--accent-3); }
 
     .project-card-image::after {
       content: '';
@@ -889,10 +1100,10 @@
     }
 
     .social-link:hover {
-      transform: translateY(-4px) scale(1.1);
+      transform: translateY(-4px) scale(1.08);
       border-color: var(--accent-1);
       color: var(--accent-1);
-      box-shadow: 0 8px 25px var(--glow-1);
+      box-shadow: 0 6px 20px var(--glow-1);
     }
 
     .social-link svg { width: 18px; height: 18px; }
@@ -955,6 +1166,52 @@
     }
 
     /* ============================================
+       FOCUS VISIBLE
+    ============================================ */
+    :focus-visible {
+      outline: 2px solid var(--accent-1);
+      outline-offset: 3px;
+    }
+
+    :focus:not(:focus-visible) {
+      outline: none;
+    }
+
+    /* ============================================
+       REDUCED MOTION
+    ============================================ */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .orb { animation: none !important; opacity: 0.2; }
+      .typing-cursor { animation: none !important; opacity: 1; }
+      .scroll-indicator { animation: none !important; }
+      .heart { animation: none !important; }
+      .about-avatar-ring { animation: none !important; }
+      .reveal { opacity: 1 !important; transform: none !important; }
+      html { scroll-behavior: auto; }
+    }
+
+    /* ============================================
+       HIGH CONTRAST
+    ============================================ */
+    @media (prefers-contrast: high) {
+      :root {
+        --border-color: rgba(255, 255, 255, 0.2);
+        --border-hover: rgba(255, 255, 255, 0.4);
+        --text-secondary: #a0a8b4;
+      }
+      [data-theme="light"] {
+        --border-color: rgba(0, 0, 0, 0.2);
+        --border-hover: rgba(0, 0, 0, 0.4);
+        --text-secondary: #4a5057;
+      }
+    }
+
+    /* ============================================
        RESPONSIVE
     ============================================ */
     @media (max-width: 900px) {
@@ -977,8 +1234,9 @@
         position: fixed;
         top: var(--nav-height);
         left: 0; right: 0;
-        background: rgba(8, 11, 18, 0.96);
+        background: var(--mobile-nav-bg);
         backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         flex-direction: column;
         padding: 30px 40px;
         gap: 24px;
@@ -996,12 +1254,17 @@
       .contact-links { flex-direction: column; align-items: center; }
       .contact-card { width: 100%; max-width: 350px; }
       .stats-section { padding: 40px 20px; }
+      .lang-code { display: none; }
+      .lang-btn { padding: 8px; }
+      .nav-controls { gap: 6px; }
     }
 
     @media (max-width: 480px) {
       .hero-buttons { flex-direction: column; align-items: center; }
       .btn { width: 100%; max-width: 280px; justify-content: center; }
       .hero-name { font-size: 1.8rem; }
+      .nav-controls { gap: 4px; }
+      .theme-toggle { width: 36px; height: 36px; }
     }
 
     @media print {
@@ -1013,393 +1276,622 @@
 </head>
 <body>
 
+  <!-- Skip to content (Accessibility) -->
+  <a href="#main-content" class="skip-link" data-i18n="a11y.skip">Pular para o conteúdo</a>
+
+  <!-- ARIA live region for announcements -->
+  <div id="a11yAnnounce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
   <!-- Scroll Progress -->
-  <div class="scroll-progress" id="scrollProgress"></div>
+  <div class="scroll-progress" id="scrollProgress" role="progressbar" aria-hidden="true"></div>
 
   <!-- Canvas particles -->
-  <canvas id="bg-canvas"></canvas>
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
 
   <!-- Ambient orbs -->
-  <div class="ambient-orbs">
+  <div class="ambient-orbs" aria-hidden="true">
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
   </div>
 
   <!-- Cursor glow -->
-  <div class="cursor-glow" id="cursorGlow"></div>
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 
   <!-- ===== NAVBAR ===== -->
-  <nav class="navbar" id="navbar">
+  <nav class="navbar" id="navbar" aria-label="Navegação principal">
     <div class="navbar-inner">
-      <a href="#home" class="nav-logo">&lt;AE /&gt;</a>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#home">Início</a></li>
-        <li><a href="#about">Sobre mim</a></li>
-        <li><a href="#projects">Projetos</a></li>
-        <li><a href="#contact">Contato</a></li>
+      <a href="#home" class="nav-logo" aria-label="Antonio Egidio — Ir ao início">&lt;AE /&gt;</a>
+
+      <ul class="nav-links" id="navLinks" role="menubar">
+        <li role="none"><a href="#home" role="menuitem" data-i18n="nav.home">Início</a></li>
+        <li role="none"><a href="#about" role="menuitem" data-i18n="nav.about">Sobre mim</a></li>
+        <li role="none"><a href="#projects" role="menuitem" data-i18n="nav.projects">Projetos</a></li>
+        <li role="none"><a href="#contact" role="menuitem" data-i18n="nav.contact">Contato</a></li>
       </ul>
-      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+
+      <div class="nav-controls">
+        <div class="lang-selector">
+          <button class="lang-btn" id="langBtn" aria-haspopup="true" aria-expanded="false" aria-label="Selecionar idioma">
+            <span class="lang-flag" aria-hidden="true">🇧🇷</span>
+            <span class="lang-code">PT</span>
+          </button>
+          <div class="lang-dropdown" id="langDropdown" role="menu" aria-label="Idiomas disponíveis">
+            <button role="menuitem" data-lang="pt" class="lang-option active">🇧🇷 Português</button>
+            <button role="menuitem" data-lang="en" class="lang-option">🇺🇸 English</button>
+            <button role="menuitem" data-lang="es" class="lang-option">🇪🇸 Español</button>
+          </div>
+        </div>
+
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema claro/escuro">
+          <i data-lucide="moon" class="theme-icon-dark" aria-hidden="true"></i>
+          <i data-lucide="sun" class="theme-icon-light" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="navLinks">
         <span></span><span></span><span></span>
       </button>
     </div>
   </nav>
 
-  <!-- ===== HERO SECTION ===== -->
-  <section class="hero" id="home">
-    <div class="hero-inner">
-      <p class="hero-greeting">Olá, meu nome é Antonio Egidio Neto</p>
+  <!-- ===== MAIN CONTENT ===== -->
+  <main id="main-content">
 
-      <h1 class="hero-name">Desenvolvedor<br><span class="highlight">Full Stack</span></h1>
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero" id="home" aria-label="Apresentação">
+      <div class="hero-inner">
+        <p class="hero-greeting" data-i18n="hero.greeting">Olá, meu nome é Antonio Egidio Neto</p>
 
-      <p class="hero-title">
-        <span id="typingText"></span><span class="typing-cursor"></span>
-      </p>
+        <h1 class="hero-name">
+          <span data-i18n="hero.role">Desenvolvedor</span><br>
+          <span class="highlight">Full Stack</span>
+        </h1>
 
-      <p class="hero-description">
-        Sou um desenvolvedor apaixonado por criar soluções ponta a ponta.
-        De São Paulo para o mundo — transformando ideias em experiências digitais completas.
-        Estou sempre buscando evoluir e aprender novas tecnologias.
-      </p>
-
-      <div class="hero-tech">
-        <span class="tech-badge">HTML5</span>
-        <span class="tech-badge">CSS3</span>
-        <span class="tech-badge">JavaScript</span>
-        <span class="tech-badge">Bootstrap</span>
-        <span class="tech-badge">PHP</span>
-        <span class="tech-badge">Git</span>
-        <span class="tech-badge">GitHub</span>
-      </div>
-
-      <div class="hero-buttons">
-        <a href="#projects" class="btn btn-primary">
-          <i data-lucide="code-2"></i>
-          Ver projetos
-        </a>
-        <a href="#contact" class="btn btn-secondary">
-          <i data-lucide="send"></i>
-          Entre em contato
-        </a>
-      </div>
-
-      <div class="hero-scroll">
-        <div class="scroll-indicator">
-          <span>Scroll down</span>
-          <i data-lucide="chevrons-down"></i>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== STATS BAR ===== -->
-  <div class="stats-section" id="stats">
-    <div class="stats-grid">
-      <div class="stat-item">
-        <span class="stat-number" data-target="13">0</span>
-        <span class="stat-label">Repositórios</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number" data-target="1">0</span>
-        <span class="stat-label">Ano de XP</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number" data-target="49">0</span>
-        <span class="stat-label">Contribuições</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number" data-target="8">0</span>
-        <span class="stat-label">Projetos</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== ABOUT SECTION ===== -->
-  <section class="section" id="about">
-    <div class="section-inner">
-      <div class="section-header reveal">
-        <span class="section-label">sobre mim</span>
-        <div class="section-divider"></div>
-        <h2 class="section-title">Quem sou eu</h2>
-      </div>
-
-      <div class="about-grid">
-        <div class="about-avatar-wrapper reveal">
-          <div class="about-avatar-ring"></div>
-          <img
-            src="https://github.com/jovemegidio.png"
-            alt="Antonio Egidio Neto"
-            class="about-avatar"
-            onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%232f81f7%22 width=%22100%22 height=%22100%22 rx=%2250%22/><text x=%2250%22 y=%2258%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22 font-family=%22sans-serif%22>AE</text></svg>'"
-          />
-        </div>
-
-        <div class="about-text reveal">
-          <h3>Quem sou eu</h3>
-          <p>
-            Desenvolvedor apaixonado por criar soluções ponta a ponta.
-            Minha jornada é marcada pela versatilidade e pelo foco em resultados.
-            Com experiência em diversas tecnologias, busco sempre entregar a melhor
-            experiência ao usuário, criando interfaces intuitivas e eficientes.
-            Atualmente focado no desenvolvimento Full Stack, unindo front-end e back-end
-            para construir aplicações completas.
-          </p>
-
-          <div class="about-info">
-            <div class="about-info-item">
-              <i data-lucide="map-pin"></i>
-              <div>
-                <div class="info-label">Localização</div>
-                <div class="info-value">São Paulo, Brasil</div>
-              </div>
-            </div>
-            <div class="about-info-item">
-              <i data-lucide="briefcase"></i>
-              <div>
-                <div class="info-label">Experiência</div>
-                <div class="info-value">1 ano</div>
-              </div>
-            </div>
-            <div class="about-info-item">
-              <i data-lucide="code-2"></i>
-              <div>
-                <div class="info-label">Foco</div>
-                <div class="info-value">Full Stack</div>
-              </div>
-            </div>
-            <div class="about-info-item">
-              <i data-lucide="check-circle"></i>
-              <div>
-                <div class="info-label">Status</div>
-                <div class="info-value" style="color: #00d26a;">Disponível</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="skills-grid">
-            <div class="skill-item">
-              <div class="skill-header">
-                <span class="skill-name">HTML / CSS</span>
-                <span class="skill-percent">90%</span>
-              </div>
-              <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
-            </div>
-            <div class="skill-item">
-              <div class="skill-header">
-                <span class="skill-name">JavaScript</span>
-                <span class="skill-percent">75%</span>
-              </div>
-              <div class="skill-bar"><div class="skill-fill" data-width="75"></div></div>
-            </div>
-            <div class="skill-item">
-              <div class="skill-header">
-                <span class="skill-name">Bootstrap</span>
-                <span class="skill-percent">80%</span>
-              </div>
-              <div class="skill-bar"><div class="skill-fill" data-width="80"></div></div>
-            </div>
-            <div class="skill-item">
-              <div class="skill-header">
-                <span class="skill-name">PHP</span>
-                <span class="skill-percent">60%</span>
-              </div>
-              <div class="skill-bar"><div class="skill-fill" data-width="60"></div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== PROJECTS SECTION ===== -->
-  <section class="section" id="projects">
-    <div class="section-inner">
-      <div class="section-header reveal">
-        <span class="section-label">portfólio</span>
-        <div class="section-divider"></div>
-        <h2 class="section-title">Meus Projetos</h2>
-        <p class="section-subtitle">Veja alguns dos meus projetos recentes</p>
-      </div>
-
-      <div class="projects-tabs reveal">
-        <button class="tab-btn active" data-tab="all">Todos</button>
-        <button class="tab-btn" data-tab="destaque">Destaque</button>
-        <button class="tab-btn" data-tab="estudo">Estudo</button>
-      </div>
-
-      <div class="projects-grid" id="projectsGrid">
-
-        <div class="project-card reveal" data-category="destaque">
-          <div class="project-card-image">🏢</div>
-          <div class="project-card-body">
-            <h3 class="project-card-title">Zyntra SGE</h3>
-            <p class="project-card-desc">Sistema de Gestão Empresarial com login glassmorphism e painel admin completo para gerenciamento.</p>
-            <div class="project-card-tech"><span>HTML5</span><span>CSS3</span><span>JavaScript</span></div>
-            <div class="project-card-links">
-              <a href="https://github.com/jovemegidio/Zyntra-SGE" target="_blank" rel="noopener" class="project-link"><i data-lucide="github"></i> Código</a>
-              <a href="https://github.com/jovemegidio/Zyntra-SGE" target="_blank" rel="noopener" class="project-link"><i data-lucide="external-link"></i> Demo</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="project-card reveal" data-category="destaque">
-          <div class="project-card-image">📰</div>
-          <div class="project-card-body">
-            <h3 class="project-card-title">NotíciasHoje</h3>
-            <p class="project-card-desc">Portal de notícias estilo G1 com painel admin e importação RSS para agregação automática de conteúdo.</p>
-            <div class="project-card-tech"><span>HTML5</span><span>JavaScript</span><span>RSS</span></div>
-            <div class="project-card-links">
-              <a href="https://github.com/jovemegidio/NoticiasHoje" target="_blank" rel="noopener" class="project-link"><i data-lucide="github"></i> Código</a>
-              <a href="https://github.com/jovemegidio/NoticiasHoje" target="_blank" rel="noopener" class="project-link"><i data-lucide="external-link"></i> Demo</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="project-card reveal" data-category="destaque">
-          <div class="project-card-image">⚽</div>
-          <div class="project-card-body">
-            <h3 class="project-card-title">B10 Mantos</h3>
-            <p class="project-card-desc">E-commerce completo de camisas de futebol com catálogo dinâmico e fluxo de checkout.</p>
-            <div class="project-card-tech"><span>HTML5</span><span>CSS3</span><span>JavaScript</span></div>
-            <div class="project-card-links">
-              <a href="https://github.com/jovemegidio/b10mantos" target="_blank" rel="noopener" class="project-link"><i data-lucide="github"></i> Código</a>
-              <a href="https://github.com/jovemegidio/b10mantos" target="_blank" rel="noopener" class="project-link"><i data-lucide="external-link"></i> Demo</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="project-card reveal" data-category="destaque">
-          <div class="project-card-image">🌊</div>
-          <div class="project-card-body">
-            <h3 class="project-card-title">Morada Azul</h3>
-            <p class="project-card-desc">Site profissional para clínica terapêutica com design responsivo e formulário de contato.</p>
-            <div class="project-card-tech"><span>Bootstrap</span><span>CSS3</span><span>PHP</span></div>
-            <div class="project-card-links">
-              <a href="https://github.com/jovemegidio/moradaazul" target="_blank" rel="noopener" class="project-link"><i data-lucide="github"></i> Código</a>
-              <a href="https://github.com/jovemegidio/moradaazul" target="_blank" rel="noopener" class="project-link"><i data-lucide="external-link"></i> Demo</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="project-card reveal" data-category="estudo">
-          <div class="project-card-image">💰</div>
-          <div class="project-card-body">
-            <h3 class="project-card-title">Planner Financeiro</h3>
-            <p class="project-card-desc">Sistema de controle financeiro com gráficos interativos e filtros avançados para organização.</p>
-            <div class="project-card-tech"><span>HTML5</span><span>CSS3</span><span>JavaScript</span></div>
-            <div class="project-card-links">
-              <a href="https://github.com/jovemegidio/plannerfinanceiro" target="_blank" rel="noopener" class="project-link"><i data-lucide="github"></i> Código</a>
-              <a href="https://github.com/jovemegidio/plannerfinanceiro" target="_blank" rel="noopener" class="project-link"><i data-lucide="external-link"></i> Demo</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="project-card reveal" data-category="estudo">
-          <div class="project-card-image">✅</div>
-          <div class="project-card-body">
-            <h3 class="project-card-title">TaskFlow</h3>
-            <p class="project-card-desc">Gerenciador de tarefas com operações CRUD completas, troca de temas e persistência via localStorage.</p>
-            <div class="project-card-tech"><span>HTML5</span><span>CSS3</span><span>JavaScript</span></div>
-            <div class="project-card-links">
-              <a href="https://github.com/jovemegidio/ListadeTarefas" target="_blank" rel="noopener" class="project-link"><i data-lucide="github"></i> Código</a>
-              <a href="https://github.com/jovemegidio/ListadeTarefas" target="_blank" rel="noopener" class="project-link"><i data-lucide="external-link"></i> Demo</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="project-card reveal" data-category="estudo">
-          <div class="project-card-image">🧮</div>
-          <div class="project-card-body">
-            <h3 class="project-card-title">Calculadora Web</h3>
-            <p class="project-card-desc">Interface glassmorphism com suporte a teclado e formatação brasileira de números.</p>
-            <div class="project-card-tech"><span>HTML5</span><span>CSS3</span><span>JavaScript</span></div>
-            <div class="project-card-links">
-              <a href="https://github.com/jovemegidio/Calc" target="_blank" rel="noopener" class="project-link"><i data-lucide="github"></i> Código</a>
-              <a href="https://github.com/jovemegidio/Calc" target="_blank" rel="noopener" class="project-link"><i data-lucide="external-link"></i> Demo</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="project-card reveal" data-category="estudo">
-          <div class="project-card-image">💅</div>
-          <div class="project-card-body">
-            <h3 class="project-card-title">Nail Designer</h3>
-            <p class="project-card-desc">Projeto criativo com JavaScript moderno, focado em design interativo e experiência do usuário.</p>
-            <div class="project-card-tech"><span>HTML5</span><span>CSS3</span><span>JavaScript</span></div>
-            <div class="project-card-links">
-              <a href="https://github.com/jovemegidio/Nail-Designer" target="_blank" rel="noopener" class="project-link"><i data-lucide="github"></i> Código</a>
-              <a href="https://github.com/jovemegidio/Nail-Designer" target="_blank" rel="noopener" class="project-link"><i data-lucide="external-link"></i> Demo</a>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== CONTACT SECTION ===== -->
-  <section class="section" id="contact">
-    <div class="section-inner">
-      <div class="section-header reveal">
-        <span class="section-label">contato</span>
-        <div class="section-divider"></div>
-        <h2 class="section-title">Vamos conversar?</h2>
-        <p class="section-subtitle">Entre em contato e acompanhe minhas redes sociais!</p>
-      </div>
-
-      <div class="contact-content reveal">
-        <p class="contact-text">
-          Estou disponível para oportunidades de trabalho, freelance ou apenas para trocar uma ideia sobre tecnologia.
-          Fique à vontade para me chamar!
+        <p class="hero-title" aria-live="polite">
+          <span id="typingText"></span><span class="typing-cursor" aria-hidden="true"></span>
         </p>
 
-        <div class="contact-links">
-          <a href="https://github.com/jovemegidio" target="_blank" rel="noopener" class="contact-card">
-            <div class="contact-card-icon github"><i data-lucide="github"></i></div>
-            <div class="contact-card-text">
-              <div class="contact-card-label">GitHub</div>
-              <div class="contact-card-value">@jovemegidio</div>
-            </div>
-          </a>
+        <p class="hero-description" data-i18n="hero.description">
+          Sou um desenvolvedor apaixonado por criar soluções ponta a ponta.
+          De São Paulo para o mundo — transformando ideias em experiências digitais completas.
+          Estou sempre buscando evoluir e aprender novas tecnologias.
+        </p>
 
-          <a href="https://instagram.com/egidiocode" target="_blank" rel="noopener" class="contact-card">
-            <div class="contact-card-icon instagram"><i data-lucide="instagram"></i></div>
-            <div class="contact-card-text">
-              <div class="contact-card-label">Instagram</div>
-              <div class="contact-card-value">@egidiocode</div>
-            </div>
-          </a>
+        <div class="hero-tech" aria-label="Tecnologias">
+          <span class="tech-badge">HTML5</span>
+          <span class="tech-badge">CSS3</span>
+          <span class="tech-badge">JavaScript</span>
+          <span class="tech-badge">Bootstrap</span>
+          <span class="tech-badge">PHP</span>
+          <span class="tech-badge">Git</span>
+          <span class="tech-badge">GitHub</span>
+        </div>
 
-          <a href="https://github.com/jovemegidio?tab=repositories" target="_blank" rel="noopener" class="contact-card">
-            <div class="contact-card-icon repos"><i data-lucide="folder-git-2"></i></div>
-            <div class="contact-card-text">
-              <div class="contact-card-label">Repositórios</div>
-              <div class="contact-card-value">13 projetos</div>
-            </div>
+        <div class="hero-buttons">
+          <a href="#projects" class="btn btn-primary">
+            <i data-lucide="code-2" aria-hidden="true"></i>
+            <span data-i18n="hero.btnProjects">Ver projetos</span>
           </a>
+          <a href="#contact" class="btn btn-secondary">
+            <i data-lucide="send" aria-hidden="true"></i>
+            <span data-i18n="hero.btnContact">Entre em contato</span>
+          </a>
+        </div>
+
+        <div class="hero-scroll" aria-hidden="true">
+          <div class="scroll-indicator">
+            <span data-i18n="hero.scroll">Scroll down</span>
+            <i data-lucide="chevrons-down"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== STATS BAR ===== -->
+    <div class="stats-section" id="stats" role="region" aria-label="Estatísticas">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number" data-target="13" aria-label="13+">0</span>
+          <span class="stat-label" data-i18n="stats.repos">Repositórios</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="1" aria-label="1+">0</span>
+          <span class="stat-label" data-i18n="stats.xp">Ano de XP</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="49" aria-label="49+">0</span>
+          <span class="stat-label" data-i18n="stats.contributions">Contribuições</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="8" aria-label="8+">0</span>
+          <span class="stat-label" data-i18n="stats.projects">Projetos</span>
         </div>
       </div>
     </div>
-  </section>
+
+    <!-- ===== ABOUT SECTION ===== -->
+    <section class="section" id="about" aria-labelledby="aboutTitle">
+      <div class="section-inner">
+        <div class="section-header reveal">
+          <span class="section-label" data-i18n="about.label">sobre mim</span>
+          <div class="section-divider" aria-hidden="true"></div>
+          <h2 class="section-title" id="aboutTitle" data-i18n="about.title">Quem sou eu</h2>
+        </div>
+
+        <div class="about-grid">
+          <div class="about-avatar-wrapper reveal">
+            <div class="about-avatar-ring" aria-hidden="true"></div>
+            <img
+              src="https://github.com/jovemegidio.png"
+              alt="Foto de Antonio Egidio Neto"
+              class="about-avatar"
+              loading="lazy"
+              onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%232f81f7%22 width=%22100%22 height=%22100%22 rx=%2250%22/><text x=%2250%22 y=%2258%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22 font-family=%22sans-serif%22>AE</text></svg>'"
+            />
+          </div>
+
+          <div class="about-text reveal">
+            <h3 data-i18n="about.heading">Quem sou eu</h3>
+            <p data-i18n="about.bio">
+              Desenvolvedor apaixonado por criar soluções ponta a ponta.
+              Minha jornada é marcada pela versatilidade e pelo foco em resultados.
+              Com experiência em diversas tecnologias, busco sempre entregar a melhor
+              experiência ao usuário, criando interfaces intuitivas e eficientes.
+              Atualmente focado no desenvolvimento Full Stack, unindo front-end e back-end
+              para construir aplicações completas.
+            </p>
+
+            <div class="about-info">
+              <div class="about-info-item">
+                <i data-lucide="map-pin" aria-hidden="true"></i>
+                <div>
+                  <div class="info-label" data-i18n="about.location">Localização</div>
+                  <div class="info-value" data-i18n="about.locationValue">São Paulo, Brasil</div>
+                </div>
+              </div>
+              <div class="about-info-item">
+                <i data-lucide="briefcase" aria-hidden="true"></i>
+                <div>
+                  <div class="info-label" data-i18n="about.experience">Experiência</div>
+                  <div class="info-value" data-i18n="about.experienceValue">1 ano</div>
+                </div>
+              </div>
+              <div class="about-info-item">
+                <i data-lucide="code-2" aria-hidden="true"></i>
+                <div>
+                  <div class="info-label" data-i18n="about.focus">Foco</div>
+                  <div class="info-value">Full Stack</div>
+                </div>
+              </div>
+              <div class="about-info-item">
+                <i data-lucide="check-circle" aria-hidden="true"></i>
+                <div>
+                  <div class="info-label" data-i18n="about.status">Status</div>
+                  <div class="info-value" style="color: #00d26a;" data-i18n="about.statusValue">Disponível</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="skills-grid" role="list" aria-label="Habilidades técnicas">
+              <div class="skill-item" role="listitem">
+                <div class="skill-header">
+                  <span class="skill-name">HTML / CSS</span>
+                  <span class="skill-percent">90%</span>
+                </div>
+                <div class="skill-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" aria-label="HTML / CSS: 90%">
+                  <div class="skill-fill" data-width="90"></div>
+                </div>
+              </div>
+              <div class="skill-item" role="listitem">
+                <div class="skill-header">
+                  <span class="skill-name">JavaScript</span>
+                  <span class="skill-percent">75%</span>
+                </div>
+                <div class="skill-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" aria-label="JavaScript: 75%">
+                  <div class="skill-fill" data-width="75"></div>
+                </div>
+              </div>
+              <div class="skill-item" role="listitem">
+                <div class="skill-header">
+                  <span class="skill-name">Bootstrap</span>
+                  <span class="skill-percent">80%</span>
+                </div>
+                <div class="skill-bar" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" aria-label="Bootstrap: 80%">
+                  <div class="skill-fill" data-width="80"></div>
+                </div>
+              </div>
+              <div class="skill-item" role="listitem">
+                <div class="skill-header">
+                  <span class="skill-name">PHP</span>
+                  <span class="skill-percent">60%</span>
+                </div>
+                <div class="skill-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" aria-label="PHP: 60%">
+                  <div class="skill-fill" data-width="60"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PROJECTS SECTION ===== -->
+    <section class="section" id="projects" aria-labelledby="projectsTitle">
+      <div class="section-inner">
+        <div class="section-header reveal">
+          <span class="section-label" data-i18n="projects.label">portfólio</span>
+          <div class="section-divider" aria-hidden="true"></div>
+          <h2 class="section-title" id="projectsTitle" data-i18n="projects.title">Meus Projetos</h2>
+          <p class="section-subtitle" data-i18n="projects.subtitle">Veja alguns dos meus projetos recentes</p>
+        </div>
+
+        <div class="projects-tabs reveal" role="tablist" aria-label="Filtrar projetos">
+          <button class="tab-btn active" data-tab="all" role="tab" aria-selected="true" data-i18n="projects.tabAll">Todos</button>
+          <button class="tab-btn" data-tab="destaque" role="tab" aria-selected="false" data-i18n="projects.tabFeatured">Destaque</button>
+          <button class="tab-btn" data-tab="estudo" role="tab" aria-selected="false" data-i18n="projects.tabStudy">Estudo</button>
+        </div>
+
+        <div class="projects-grid" id="projectsGrid" role="tabpanel">
+
+          <article class="project-card reveal" data-category="destaque">
+            <div class="project-card-image" role="img" aria-label="Zyntra SGE">🏢</div>
+            <div class="project-card-body">
+              <h3 class="project-card-title">Zyntra SGE</h3>
+              <p class="project-card-desc" data-i18n="projects.zyntra.desc">Sistema de Gestão Empresarial com login glassmorphism e painel admin completo para gerenciamento.</p>
+              <div class="project-card-tech"><span>HTML5</span><span>CSS3</span><span>JavaScript</span></div>
+              <div class="project-card-links">
+                <a href="https://github.com/jovemegidio/Zyntra-SGE" target="_blank" rel="noopener noreferrer" class="project-link"><i data-lucide="github" aria-hidden="true"></i> <span data-i18n="projects.code">Código</span></a>
+                <a href="https://github.com/jovemegidio/Zyntra-SGE" target="_blank" rel="noopener noreferrer" class="project-link"><i data-lucide="external-link" aria-hidden="true"></i> Demo</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card reveal" data-category="destaque">
+            <div class="project-card-image" role="img" aria-label="NotíciasHoje">📰</div>
+            <div class="project-card-body">
+              <h3 class="project-card-title">NotíciasHoje</h3>
+              <p class="project-card-desc" data-i18n="projects.noticias.desc">Portal de notícias estilo G1 com painel admin e importação RSS para agregação automática de conteúdo.</p>
+              <div class="project-card-tech"><span>HTML5</span><span>JavaScript</span><span>RSS</span></div>
+              <div class="project-card-links">
+                <a href="https://github.com/jovemegidio/NoticiasHoje" target="_blank" rel="noopener noreferrer" class="project-link"><i data-lucide="github" aria-hidden="true"></i> <span data-i18n="projects.code">Código</span></a>
+                <a href="https://github.com/jovemegidio/NoticiasHoje" target="_blank" rel="noopener noreferrer" class="project-link"><i data-lucide="external-link" aria-hidden="true"></i> Demo</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card reveal" data-category="destaque">
+            <div class="project-card-image" role="img" aria-label="B10 Mantos">⚽</div>
+            <div class="project-card-body">
+              <h3 class="project-card-title">B10 Mantos</h3>
+              <p class="project-card-desc" data-i18n="projects.b10.desc">E-commerce completo de camisas de futebol com catálogo dinâmico e fluxo de checkout.</p>
+              <div class="project-card-tech"><span>HTML5</span><span>CSS3</span><span>JavaScript</span></div>
+              <div class="project-card-links">
+                <a href="https://github.com/jovemegidio/b10mantos" target="_blank" rel="noopener noreferrer" class="project-link"><i data-lucide="github" aria-hidden="true"></i> <span data-i18n="projects.code">Código</span></a>
+                <a href="https://github.com/jovemegidio/b10mantos" target="_blank" rel="noopener noreferrer" class="project-link"><i data-lucide="external-link" aria-hidden="true"></i> Demo</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card reveal" data-category="destaque">
+            <div class="project-card-image" role="img" aria-label="Morada Azul">🌊</div>
+            <div class="project-card-body">
+              <h3 class="project-card-title">Morada Azul</h3>
+              <p class="project-card-desc" data-i18n="projects.morada.desc">Site profissional para clínica terapêutica com design responsivo e formulário de contato.</p>
+              <div class="project-card-tech"><span>Bootstrap</span><span>CSS3</span><span>PHP</span></div>
+              <div class="project-card-links">
+                <a href="https://github.com/jovemegidio/moradaazul" target="_blank" rel="noopener noreferrer" class="project-link"><i data-lucide="github" aria-hidden="true"></i> <span data-i18n="projects.code">Código</span></a>
+                <a href="https://github.com/jovemegidio/moradaazul" target="_blank" rel="noopener noreferrer" class="project-link"><i data-lucide="external-link" aria-hidden="true"></i> Demo</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card reveal" data-category="estudo">
+            <div class="project-card-image" role="img" aria-label="Planner Financeiro">💰</div>
+            <div class="project-card-body">
+              <h3 class="project-card-title">Planner Financeiro</h3>
+              <p class="project-card-desc" data-i18n="projects.planner.desc">Sistema de controle financeiro com gráficos interativos e filtros avançados para organização.</p>
+              <div class="project-card-tech"><span>HTML5</span><span>CSS3</span><span>JavaScript</span></div>
+              <div class="project-card-links">
+                <a href="https://github.com/jovemegidio/plannerfinanceiro" target="_blank" rel="noopener noreferrer" class="project-link"><i data-lucide="github" aria-hidden="true"></i> <span data-i18n="projects.code">Código</span></a>
+                <a href="https://github.com/jovemegidio/plannerfinanceiro" target="_blank" rel="noopener noreferrer" class="project-link"><i data-lucide="external-link" aria-hidden="true"></i> Demo</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card reveal" data-category="estudo">
+            <div class="project-card-image" role="img" aria-label="TaskFlow">✅</div>
+            <div class="project-card-body">
+              <h3 class="project-card-title">TaskFlow</h3>
+              <p class="project-card-desc" data-i18n="projects.taskflow.desc">Gerenciador de tarefas com operações CRUD completas, troca de temas e persistência via localStorage.</p>
+              <div class="project-card-tech"><span>HTML5</span><span>CSS3</span><span>JavaScript</span></div>
+              <div class="project-card-links">
+                <a href="https://github.com/jovemegidio/ListadeTarefas" target="_blank" rel="noopener noreferrer" class="project-link"><i data-lucide="github" aria-hidden="true"></i> <span data-i18n="projects.code">Código</span></a>
+                <a href="https://github.com/jovemegidio/ListadeTarefas" target="_blank" rel="noopener noreferrer" class="project-link"><i data-lucide="external-link" aria-hidden="true"></i> Demo</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card reveal" data-category="estudo">
+            <div class="project-card-image" role="img" aria-label="Calculadora Web">🧮</div>
+            <div class="project-card-body">
+              <h3 class="project-card-title">Calculadora Web</h3>
+              <p class="project-card-desc" data-i18n="projects.calc.desc">Interface glassmorphism com suporte a teclado e formatação brasileira de números.</p>
+              <div class="project-card-tech"><span>HTML5</span><span>CSS3</span><span>JavaScript</span></div>
+              <div class="project-card-links">
+                <a href="https://github.com/jovemegidio/Calc" target="_blank" rel="noopener noreferrer" class="project-link"><i data-lucide="github" aria-hidden="true"></i> <span data-i18n="projects.code">Código</span></a>
+                <a href="https://github.com/jovemegidio/Calc" target="_blank" rel="noopener noreferrer" class="project-link"><i data-lucide="external-link" aria-hidden="true"></i> Demo</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card reveal" data-category="estudo">
+            <div class="project-card-image" role="img" aria-label="Nail Designer">💅</div>
+            <div class="project-card-body">
+              <h3 class="project-card-title">Nail Designer</h3>
+              <p class="project-card-desc" data-i18n="projects.nail.desc">Projeto criativo com JavaScript moderno, focado em design interativo e experiência do usuário.</p>
+              <div class="project-card-tech"><span>HTML5</span><span>CSS3</span><span>JavaScript</span></div>
+              <div class="project-card-links">
+                <a href="https://github.com/jovemegidio/Nail-Designer" target="_blank" rel="noopener noreferrer" class="project-link"><i data-lucide="github" aria-hidden="true"></i> <span data-i18n="projects.code">Código</span></a>
+                <a href="https://github.com/jovemegidio/Nail-Designer" target="_blank" rel="noopener noreferrer" class="project-link"><i data-lucide="external-link" aria-hidden="true"></i> Demo</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CONTACT SECTION ===== -->
+    <section class="section" id="contact" aria-labelledby="contactTitle">
+      <div class="section-inner">
+        <div class="section-header reveal">
+          <span class="section-label" data-i18n="contact.label">contato</span>
+          <div class="section-divider" aria-hidden="true"></div>
+          <h2 class="section-title" id="contactTitle" data-i18n="contact.title">Vamos conversar?</h2>
+          <p class="section-subtitle" data-i18n="contact.subtitle">Entre em contato e acompanhe minhas redes sociais!</p>
+        </div>
+
+        <div class="contact-content reveal">
+          <p class="contact-text" data-i18n="contact.text">
+            Estou disponível para oportunidades de trabalho, freelance ou apenas para trocar uma ideia sobre tecnologia.
+            Fique à vontade para me chamar!
+          </p>
+
+          <div class="contact-links">
+            <a href="https://github.com/jovemegidio" target="_blank" rel="noopener noreferrer" class="contact-card" aria-label="GitHub — @jovemegidio">
+              <div class="contact-card-icon github"><i data-lucide="github" aria-hidden="true"></i></div>
+              <div class="contact-card-text">
+                <div class="contact-card-label">GitHub</div>
+                <div class="contact-card-value">@jovemegidio</div>
+              </div>
+            </a>
+
+            <a href="https://instagram.com/egidiocode" target="_blank" rel="noopener noreferrer" class="contact-card" aria-label="Instagram — @egidiocode">
+              <div class="contact-card-icon instagram"><i data-lucide="instagram" aria-hidden="true"></i></div>
+              <div class="contact-card-text">
+                <div class="contact-card-label">Instagram</div>
+                <div class="contact-card-value">@egidiocode</div>
+              </div>
+            </a>
+
+            <a href="https://github.com/jovemegidio?tab=repositories" target="_blank" rel="noopener noreferrer" class="contact-card" aria-label="Repositórios — 13 projetos">
+              <div class="contact-card-icon repos"><i data-lucide="folder-git-2" aria-hidden="true"></i></div>
+              <div class="contact-card-text">
+                <div class="contact-card-label" data-i18n="contact.reposLabel">Repositórios</div>
+                <div class="contact-card-value" data-i18n="contact.reposValue">13 projetos</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
 
   <!-- ===== FOOTER ===== -->
-  <footer class="footer">
-    <div class="footer-social">
-      <a href="https://github.com/jovemegidio" target="_blank" rel="noopener" class="social-link" aria-label="GitHub"><i data-lucide="github"></i></a>
-      <a href="https://instagram.com/egidiocode" target="_blank" rel="noopener" class="social-link" aria-label="Instagram"><i data-lucide="instagram"></i></a>
-      <a href="https://github.com/jovemegidio?tab=repositories" target="_blank" rel="noopener" class="social-link" aria-label="Repositórios"><i data-lucide="folder-git-2"></i></a>
-      <a href="https://github.com/jovemegidio" target="_blank" rel="noopener" class="social-link" aria-label="Perfil"><i data-lucide="user"></i></a>
+  <footer class="footer" role="contentinfo">
+    <div class="footer-social" aria-label="Redes sociais">
+      <a href="https://github.com/jovemegidio" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub"><i data-lucide="github" aria-hidden="true"></i></a>
+      <a href="https://instagram.com/egidiocode" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram"><i data-lucide="instagram" aria-hidden="true"></i></a>
+      <a href="https://github.com/jovemegidio?tab=repositories" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Repositórios"><i data-lucide="folder-git-2" aria-hidden="true"></i></a>
+      <a href="https://github.com/jovemegidio" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Perfil"><i data-lucide="user" aria-hidden="true"></i></a>
     </div>
-    <p class="footer-text">Feito com <span class="heart">♥</span> e muito ☕</p>
-    <p class="footer-copy">© 2026 Antonio Egidio Neto — São Paulo, Brasil 🇧🇷</p>
+    <p class="footer-text" data-i18n-html="footer.text">Feito com <span class="heart">♥</span> e muito ☕</p>
+    <p class="footer-copy" data-i18n="footer.copy">© 2026 Antonio Egidio Neto — São Paulo, Brasil 🇧🇷</p>
   </footer>
 
   <!-- ============================================
        JAVASCRIPT
   ============================================ -->
   <script>
+    /* ======================================================
+       TRANSLATIONS (PT / EN / ES)
+    ====================================================== */
+    const translations = {
+      pt: {
+        'nav.home': 'Início',
+        'nav.about': 'Sobre mim',
+        'nav.projects': 'Projetos',
+        'nav.contact': 'Contato',
+        'hero.greeting': 'Olá, meu nome é Antonio Egidio Neto',
+        'hero.role': 'Desenvolvedor',
+        'hero.description': 'Sou um desenvolvedor apaixonado por criar soluções ponta a ponta. De São Paulo para o mundo — transformando ideias em experiências digitais completas. Estou sempre buscando evoluir e aprender novas tecnologias.',
+        'hero.btnProjects': 'Ver projetos',
+        'hero.btnContact': 'Entre em contato',
+        'hero.scroll': 'Scroll down',
+        'stats.repos': 'Repositórios',
+        'stats.xp': 'Ano de XP',
+        'stats.contributions': 'Contribuições',
+        'stats.projects': 'Projetos',
+        'about.label': 'sobre mim',
+        'about.title': 'Quem sou eu',
+        'about.heading': 'Quem sou eu',
+        'about.bio': 'Desenvolvedor apaixonado por criar soluções ponta a ponta. Minha jornada é marcada pela versatilidade e pelo foco em resultados. Com experiência em diversas tecnologias, busco sempre entregar a melhor experiência ao usuário, criando interfaces intuitivas e eficientes. Atualmente focado no desenvolvimento Full Stack, unindo front-end e back-end para construir aplicações completas.',
+        'about.location': 'Localização',
+        'about.locationValue': 'São Paulo, Brasil',
+        'about.experience': 'Experiência',
+        'about.experienceValue': '1 ano',
+        'about.focus': 'Foco',
+        'about.status': 'Status',
+        'about.statusValue': 'Disponível',
+        'projects.label': 'portfólio',
+        'projects.title': 'Meus Projetos',
+        'projects.subtitle': 'Veja alguns dos meus projetos recentes',
+        'projects.tabAll': 'Todos',
+        'projects.tabFeatured': 'Destaque',
+        'projects.tabStudy': 'Estudo',
+        'projects.code': 'Código',
+        'projects.zyntra.desc': 'Sistema de Gestão Empresarial com login glassmorphism e painel admin completo para gerenciamento.',
+        'projects.noticias.desc': 'Portal de notícias estilo G1 com painel admin e importação RSS para agregação automática de conteúdo.',
+        'projects.b10.desc': 'E-commerce completo de camisas de futebol com catálogo dinâmico e fluxo de checkout.',
+        'projects.morada.desc': 'Site profissional para clínica terapêutica com design responsivo e formulário de contato.',
+        'projects.planner.desc': 'Sistema de controle financeiro com gráficos interativos e filtros avançados para organização.',
+        'projects.taskflow.desc': 'Gerenciador de tarefas com operações CRUD completas, troca de temas e persistência via localStorage.',
+        'projects.calc.desc': 'Interface glassmorphism com suporte a teclado e formatação brasileira de números.',
+        'projects.nail.desc': 'Projeto criativo com JavaScript moderno, focado em design interativo e experiência do usuário.',
+        'contact.label': 'contato',
+        'contact.title': 'Vamos conversar?',
+        'contact.subtitle': 'Entre em contato e acompanhe minhas redes sociais!',
+        'contact.text': 'Estou disponível para oportunidades de trabalho, freelance ou apenas para trocar uma ideia sobre tecnologia. Fique à vontade para me chamar!',
+        'contact.reposLabel': 'Repositórios',
+        'contact.reposValue': '13 projetos',
+        'footer.text': 'Feito com <span class="heart">\u2665</span> e muito \u2615',
+        'footer.copy': '\u00A9 2026 Antonio Egidio Neto \u2014 S\u00E3o Paulo, Brasil \uD83C\uDDE7\uD83C\uDDF7',
+        'a11y.skip': 'Pular para o conteúdo',
+        'a11y.darkTheme': 'Tema escuro ativado',
+        'a11y.lightTheme': 'Tema claro ativado',
+        'a11y.langChanged': 'Idioma alterado para Português',
+        'theme.toggle': 'Alternar tema claro/escuro',
+        'nav.aria': 'Navegação principal',
+        typing: ['Construindo experiências digitais', 'Front-end & Back-end', 'Do conceito ao deploy', 'Aberto a novos desafios']
+      },
+      en: {
+        'nav.home': 'Home',
+        'nav.about': 'About me',
+        'nav.projects': 'Projects',
+        'nav.contact': 'Contact',
+        'hero.greeting': 'Hi, my name is Antonio Egidio Neto',
+        'hero.role': 'Developer',
+        'hero.description': "I'm a developer passionate about creating end-to-end solutions. From S\u00E3o Paulo to the world \u2014 turning ideas into complete digital experiences. Always seeking to evolve and learn new technologies.",
+        'hero.btnProjects': 'View projects',
+        'hero.btnContact': 'Get in touch',
+        'hero.scroll': 'Scroll down',
+        'stats.repos': 'Repositories',
+        'stats.xp': 'Year of XP',
+        'stats.contributions': 'Contributions',
+        'stats.projects': 'Projects',
+        'about.label': 'about me',
+        'about.title': 'Who am I',
+        'about.heading': 'Who am I',
+        'about.bio': 'Developer passionate about creating end-to-end solutions. My journey is marked by versatility and focus on results. With experience in various technologies, I always strive to deliver the best user experience, creating intuitive and efficient interfaces. Currently focused on Full Stack development, combining front-end and back-end to build complete applications.',
+        'about.location': 'Location',
+        'about.locationValue': 'S\u00E3o Paulo, Brazil',
+        'about.experience': 'Experience',
+        'about.experienceValue': '1 year',
+        'about.focus': 'Focus',
+        'about.status': 'Status',
+        'about.statusValue': 'Available',
+        'projects.label': 'portfolio',
+        'projects.title': 'My Projects',
+        'projects.subtitle': 'Check out some of my recent projects',
+        'projects.tabAll': 'All',
+        'projects.tabFeatured': 'Featured',
+        'projects.tabStudy': 'Study',
+        'projects.code': 'Code',
+        'projects.zyntra.desc': 'Business Management System with glassmorphism login and complete admin dashboard.',
+        'projects.noticias.desc': 'G1-style news portal with admin panel and RSS import for automatic content aggregation.',
+        'projects.b10.desc': 'Complete football jerseys e-commerce with dynamic catalog and checkout flow.',
+        'projects.morada.desc': 'Professional website for therapeutic clinic with responsive design and contact form.',
+        'projects.planner.desc': 'Financial control system with interactive charts and advanced filters for organization.',
+        'projects.taskflow.desc': 'Task manager with complete CRUD operations, theme switching and localStorage persistence.',
+        'projects.calc.desc': 'Glassmorphism interface with keyboard support and Brazilian number formatting.',
+        'projects.nail.desc': 'Creative project with modern JavaScript, focused on interactive design and user experience.',
+        'contact.label': 'contact',
+        'contact.title': "Let's talk?",
+        'contact.subtitle': 'Get in touch and follow my social media!',
+        'contact.text': "I'm available for job opportunities, freelance work, or just to chat about technology. Feel free to reach out!",
+        'contact.reposLabel': 'Repositories',
+        'contact.reposValue': '13 projects',
+        'footer.text': 'Made with <span class="heart">\u2665</span> and lots of \u2615',
+        'footer.copy': '\u00A9 2026 Antonio Egidio Neto \u2014 S\u00E3o Paulo, Brazil \uD83C\uDDE7\uD83C\uDDF7',
+        'a11y.skip': 'Skip to content',
+        'a11y.darkTheme': 'Dark theme enabled',
+        'a11y.lightTheme': 'Light theme enabled',
+        'a11y.langChanged': 'Language changed to English',
+        'theme.toggle': 'Toggle light/dark theme',
+        'nav.aria': 'Main navigation',
+        typing: ['Building digital experiences', 'Front-end & Back-end', 'From concept to deploy', 'Open to new challenges']
+      },
+      es: {
+        'nav.home': 'Inicio',
+        'nav.about': 'Sobre m\u00ED',
+        'nav.projects': 'Proyectos',
+        'nav.contact': 'Contacto',
+        'hero.greeting': 'Hola, mi nombre es Antonio Egidio Neto',
+        'hero.role': 'Desarrollador',
+        'hero.description': 'Soy un desarrollador apasionado por crear soluciones de punta a punta. De S\u00E3o Paulo al mundo \u2014 convirtiendo ideas en experiencias digitales completas. Siempre buscando evolucionar y aprender nuevas tecnolog\u00EDas.',
+        'hero.btnProjects': 'Ver proyectos',
+        'hero.btnContact': 'Cont\u00E1ctame',
+        'hero.scroll': 'Scroll down',
+        'stats.repos': 'Repositorios',
+        'stats.xp': 'A\u00F1o de XP',
+        'stats.contributions': 'Contribuciones',
+        'stats.projects': 'Proyectos',
+        'about.label': 'sobre m\u00ED',
+        'about.title': 'Qui\u00E9n soy',
+        'about.heading': 'Qui\u00E9n soy',
+        'about.bio': 'Desarrollador apasionado por crear soluciones de punta a punta. Mi trayectoria est\u00E1 marcada por la versatilidad y el enfoque en resultados. Con experiencia en diversas tecnolog\u00EDas, busco siempre ofrecer la mejor experiencia al usuario, creando interfaces intuitivas y eficientes. Actualmente enfocado en el desarrollo Full Stack, combinando front-end y back-end para construir aplicaciones completas.',
+        'about.location': 'Ubicaci\u00F3n',
+        'about.locationValue': 'S\u00E3o Paulo, Brasil',
+        'about.experience': 'Experiencia',
+        'about.experienceValue': '1 a\u00F1o',
+        'about.focus': 'Enfoque',
+        'about.status': 'Estado',
+        'about.statusValue': 'Disponible',
+        'projects.label': 'portafolio',
+        'projects.title': 'Mis Proyectos',
+        'projects.subtitle': 'Mira algunos de mis proyectos recientes',
+        'projects.tabAll': 'Todos',
+        'projects.tabFeatured': 'Destacados',
+        'projects.tabStudy': 'Estudio',
+        'projects.code': 'C\u00F3digo',
+        'projects.zyntra.desc': 'Sistema de Gesti\u00F3n Empresarial con login glassmorphism y panel admin completo.',
+        'projects.noticias.desc': 'Portal de noticias estilo G1 con panel admin e importaci\u00F3n RSS para agregaci\u00F3n autom\u00E1tica.',
+        'projects.b10.desc': 'E-commerce completo de camisetas de f\u00FAtbol con cat\u00E1logo din\u00E1mico y flujo de checkout.',
+        'projects.morada.desc': 'Sitio profesional para cl\u00EDnica terap\u00E9utica con dise\u00F1o responsivo y formulario de contacto.',
+        'projects.planner.desc': 'Sistema de control financiero con gr\u00E1ficos interactivos y filtros avanzados.',
+        'projects.taskflow.desc': 'Gestor de tareas con operaciones CRUD completas, cambio de temas y persistencia v\u00EDa localStorage.',
+        'projects.calc.desc': 'Interfaz glassmorphism con soporte de teclado y formateo brasile\u00F1o de n\u00FAmeros.',
+        'projects.nail.desc': 'Proyecto creativo con JavaScript moderno, enfocado en dise\u00F1o interactivo y experiencia del usuario.',
+        'contact.label': 'contacto',
+        'contact.title': '\u00BFHablamos?',
+        'contact.subtitle': '\u00A1Cont\u00E1ctame y sigue mis redes sociales!',
+        'contact.text': 'Estoy disponible para oportunidades de trabajo, freelance o simplemente para charlar sobre tecnolog\u00EDa. \u00A1No dudes en contactarme!',
+        'contact.reposLabel': 'Repositorios',
+        'contact.reposValue': '13 proyectos',
+        'footer.text': 'Hecho con <span class="heart">\u2665</span> y mucho \u2615',
+        'footer.copy': '\u00A9 2026 Antonio Egidio Neto \u2014 S\u00E3o Paulo, Brasil \uD83C\uDDE7\uD83C\uDDF7',
+        'a11y.skip': 'Saltar al contenido',
+        'a11y.darkTheme': 'Tema oscuro activado',
+        'a11y.lightTheme': 'Tema claro activado',
+        'a11y.langChanged': 'Idioma cambiado a Espa\u00F1ol',
+        'theme.toggle': 'Cambiar tema claro/oscuro',
+        'nav.aria': 'Navegaci\u00F3n principal',
+        typing: ['Construyendo experiencias digitales', 'Front-end & Back-end', 'Del concepto al deploy', 'Abierto a nuevos desaf\u00EDos']
+      }
+    };
+
+    let currentLang = 'pt';
+
+    /* ======================================================
+       DOM READY
+    ====================================================== */
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
+      initTheme();
+      initI18n();
+      initAccessibility();
       initParticles();
       initCountUp();
       initCursorGlow();
@@ -1411,7 +1903,157 @@
       initProjectTabs();
     });
 
-    // ===== NAVBAR =====
+    /* ======================================================
+       THEME TOGGLE
+    ====================================================== */
+    function initTheme() {
+      const toggle = document.getElementById('themeToggle');
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = saved || (prefersDark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+
+      toggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        const t = translations[currentLang];
+        toggle.setAttribute('aria-label', t['theme.toggle']);
+        announce(t[next === 'dark' ? 'a11y.darkTheme' : 'a11y.lightTheme']);
+        lucide.createIcons();
+      });
+
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) {
+          document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+          lucide.createIcons();
+        }
+      });
+    }
+
+    /* ======================================================
+       I18N — LANGUAGE SYSTEM
+    ====================================================== */
+    function initI18n() {
+      const saved = localStorage.getItem('lang');
+      if (saved && translations[saved]) {
+        currentLang = saved;
+      } else {
+        const browserLang = navigator.language.toLowerCase();
+        if (browserLang.startsWith('es')) currentLang = 'es';
+        else if (browserLang.startsWith('en')) currentLang = 'en';
+        else currentLang = 'pt';
+      }
+      setLanguage(currentLang, false);
+
+      const btn = document.getElementById('langBtn');
+      const dropdown = document.getElementById('langDropdown');
+
+      btn.addEventListener('click', () => {
+        const isOpen = dropdown.classList.contains('open');
+        dropdown.classList.toggle('open');
+        btn.setAttribute('aria-expanded', String(!isOpen));
+      });
+
+      dropdown.querySelectorAll('.lang-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+          const lang = opt.getAttribute('data-lang');
+          setLanguage(lang, true);
+          dropdown.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+          localStorage.setItem('lang', lang);
+        });
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.lang-selector')) {
+          dropdown.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && dropdown.classList.contains('open')) {
+          dropdown.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.focus();
+        }
+      });
+    }
+
+    function setLanguage(lang, doAnnounce) {
+      currentLang = lang;
+      const t = translations[lang];
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] !== undefined) el.textContent = t[key];
+      });
+
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.getAttribute('data-i18n-html');
+        if (t[key] !== undefined) el.innerHTML = t[key];
+      });
+
+      var langMap = { pt: 'pt-BR', en: 'en', es: 'es' };
+      document.documentElement.lang = langMap[lang] || lang;
+
+      var flags = { pt: '\uD83C\uDDE7\uD83C\uDDF7', en: '\uD83C\uDDFA\uD83C\uDDF8', es: '\uD83C\uDDEA\uD83C\uDDF8' };
+      var codes = { pt: 'PT', en: 'EN', es: 'ES' };
+      var flagEl = document.querySelector('.lang-flag');
+      var codeEl = document.querySelector('.lang-code');
+      if (flagEl) flagEl.textContent = flags[lang];
+      if (codeEl) codeEl.textContent = codes[lang];
+
+      document.querySelectorAll('.lang-option').forEach(opt => {
+        opt.classList.toggle('active', opt.getAttribute('data-lang') === lang);
+      });
+
+      document.getElementById('navbar').setAttribute('aria-label', t['nav.aria']);
+      document.getElementById('themeToggle').setAttribute('aria-label', t['theme.toggle']);
+
+      if (window._typingTimeout) clearTimeout(window._typingTimeout);
+      initTyping();
+
+      if (doAnnounce) announce(t['a11y.langChanged']);
+    }
+
+    /* ======================================================
+       ACCESSIBILITY HELPERS
+    ====================================================== */
+    function announce(message) {
+      var el = document.getElementById('a11yAnnounce');
+      el.textContent = '';
+      setTimeout(function() { el.textContent = message; }, 100);
+    }
+
+    function initAccessibility() {
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          var links = document.getElementById('navLinks');
+          var toggle = document.getElementById('navToggle');
+          if (links.classList.contains('open')) {
+            links.classList.remove('open');
+            toggle.setAttribute('aria-expanded', 'false');
+            var spans = toggle.querySelectorAll('span');
+            spans[0].style.transform = '';
+            spans[1].style.opacity = '1';
+            spans[2].style.transform = '';
+            toggle.focus();
+          }
+        }
+      });
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        var canvas = document.getElementById('bg-canvas');
+        if (canvas) canvas.style.display = 'none';
+      }
+    }
+
+    /* ======================================================
+       NAVBAR
+    ====================================================== */
     function initNavbar() {
       const navbar = document.getElementById('navbar');
       const toggle = document.getElementById('navToggle');
@@ -1423,8 +2065,10 @@
 
       toggle.addEventListener('click', () => {
         links.classList.toggle('open');
+        const isOpen = links.classList.contains('open');
+        toggle.setAttribute('aria-expanded', String(isOpen));
         const spans = toggle.querySelectorAll('span');
-        if (links.classList.contains('open')) {
+        if (isOpen) {
           spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
           spans[1].style.opacity = '0';
           spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
@@ -1438,6 +2082,7 @@
       links.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
           links.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
           const spans = toggle.querySelectorAll('span');
           spans[0].style.transform = '';
           spans[1].style.opacity = '1';
@@ -1446,15 +2091,13 @@
       });
     }
 
-    // ===== TYPING ANIMATION =====
+    /* ======================================================
+       TYPING ANIMATION
+    ====================================================== */
     function initTyping() {
       const el = document.getElementById('typingText');
-      const phrases = [
-        'Construindo experiências digitais',
-        'Front-end & Back-end',
-        'Do conceito ao deploy',
-        'Aberto a novos desafios'
-      ];
+      if (!el) return;
+      const phrases = translations[currentLang].typing;
       let phraseIndex = 0, charIndex = 0, isDeleting = false;
 
       function type() {
@@ -1466,7 +2109,6 @@
           el.textContent = current.substring(0, charIndex + 1);
           charIndex++;
         }
-
         let speed = isDeleting ? 30 : 60;
         if (!isDeleting && charIndex === current.length) {
           speed = 2000;
@@ -1476,12 +2118,14 @@
           phraseIndex = (phraseIndex + 1) % phrases.length;
           speed = 400;
         }
-        setTimeout(type, speed);
+        window._typingTimeout = setTimeout(type, speed);
       }
-      setTimeout(type, 1500);
+      window._typingTimeout = setTimeout(type, 1500);
     }
 
-    // ===== REVEAL ON SCROLL =====
+    /* ======================================================
+       REVEAL ON SCROLL
+    ====================================================== */
     function initReveal() {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -1491,7 +2135,9 @@
       document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     }
 
-    // ===== SKILL BARS =====
+    /* ======================================================
+       SKILL BARS
+    ====================================================== */
     function initSkillBars() {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -1506,15 +2152,21 @@
       document.querySelectorAll('.skills-grid').forEach(el => observer.observe(el));
     }
 
-    // ===== PROJECT TABS =====
+    /* ======================================================
+       PROJECT TABS
+    ====================================================== */
     function initProjectTabs() {
       const tabs = document.querySelectorAll('.tab-btn');
       const cards = document.querySelectorAll('.project-card');
 
       tabs.forEach(tab => {
         tab.addEventListener('click', () => {
-          tabs.forEach(t => t.classList.remove('active'));
+          tabs.forEach(t => {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+          });
           tab.classList.add('active');
+          tab.setAttribute('aria-selected', 'true');
           const filter = tab.getAttribute('data-tab');
 
           cards.forEach(card => {
@@ -1531,8 +2183,11 @@
       });
     }
 
-    // ===== PARTICLE CONSTELLATION =====
+    /* ======================================================
+       PARTICLE CONSTELLATION
+    ====================================================== */
     function initParticles() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       const canvas = document.getElementById('bg-canvas');
       const ctx = canvas.getContext('2d');
       let particles = [];
@@ -1542,6 +2197,14 @@
       resize();
       window.addEventListener('resize', resize);
       window.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+      function pColor(opacity) {
+        const s = getComputedStyle(document.documentElement);
+        const r = s.getPropertyValue('--particle-r').trim() || '47';
+        const g = s.getPropertyValue('--particle-g').trim() || '129';
+        const b = s.getPropertyValue('--particle-b').trim() || '247';
+        return 'rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')';
+      }
 
       class Particle {
         constructor() { this.reset(); }
@@ -1571,7 +2234,7 @@
         draw() {
           ctx.beginPath();
           ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(47, 129, 247, ${this.opacity})`;
+          ctx.fillStyle = pColor(this.opacity);
           ctx.fill();
         }
       }
@@ -1588,7 +2251,7 @@
               ctx.beginPath();
               ctx.moveTo(particles[i].x, particles[i].y);
               ctx.lineTo(particles[j].x, particles[j].y);
-              ctx.strokeStyle = `rgba(47, 129, 247, ${(1 - dist / 120) * 0.12})`;
+              ctx.strokeStyle = pColor((1 - dist / 120) * 0.12);
               ctx.lineWidth = 0.5;
               ctx.stroke();
             }
@@ -1599,7 +2262,7 @@
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = `rgba(47, 129, 247, ${(1 - dist / 180) * 0.2})`;
+            ctx.strokeStyle = pColor((1 - dist / 180) * 0.2);
             ctx.lineWidth = 0.8;
             ctx.stroke();
           }
@@ -1615,7 +2278,9 @@
       animate();
     }
 
-    // ===== COUNT UP =====
+    /* ======================================================
+       COUNT UP
+    ====================================================== */
     function initCountUp() {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -1637,13 +2302,16 @@
       document.querySelectorAll('.stat-number[data-target]').forEach(n => observer.observe(n));
     }
 
-    // ===== CURSOR GLOW =====
+    /* ======================================================
+       CURSOR GLOW
+    ====================================================== */
     function initCursorGlow() {
       const glow = document.getElementById('cursorGlow');
       if (window.matchMedia('(hover: hover)').matches) {
         let visible = false;
         document.addEventListener('mousemove', (e) => {
-          if (!visible) { glow.style.opacity = '0.4'; visible = true; }
+          const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+          if (!visible) { glow.style.opacity = isLight ? '0.15' : '0.4'; visible = true; }
           glow.style.left = e.clientX + 'px';
           glow.style.top = e.clientY + 'px';
         });
@@ -1651,7 +2319,9 @@
       }
     }
 
-    // ===== SCROLL PROGRESS =====
+    /* ======================================================
+       SCROLL PROGRESS
+    ====================================================== */
     function initScrollProgress() {
       const bar = document.getElementById('scrollProgress');
       window.addEventListener('scroll', () => {
@@ -1660,23 +2330,29 @@
       });
     }
 
-    // ===== RIPPLE EFFECT =====
+    /* ======================================================
+       RIPPLE EFFECT
+    ====================================================== */
     document.addEventListener('click', function(e) {
       const card = e.target.closest('.project-card, .contact-card');
       if (!card) return;
       const rect = card.getBoundingClientRect();
       const ripple = document.createElement('div');
       const size = Math.max(rect.width, rect.height);
-      ripple.style.cssText = `position:absolute;width:${size}px;height:${size}px;border-radius:50%;background:radial-gradient(circle,rgba(47,129,247,0.12) 0%,transparent 70%);left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px;transform:scale(0);animation:rippleEffect .6s ease-out forwards;pointer-events:none;z-index:0;`;
+      const s = getComputedStyle(document.documentElement);
+      const r = s.getPropertyValue('--particle-r').trim() || '47';
+      const g = s.getPropertyValue('--particle-g').trim() || '129';
+      const b = s.getPropertyValue('--particle-b').trim() || '247';
+      ripple.style.cssText = 'position:absolute;width:' + size + 'px;height:' + size + 'px;border-radius:50%;background:radial-gradient(circle,rgba(' + r + ',' + g + ',' + b + ',0.12) 0%,transparent 70%);left:' + (e.clientX - rect.left - size / 2) + 'px;top:' + (e.clientY - rect.top - size / 2) + 'px;transform:scale(0);animation:rippleEffect .6s ease-out forwards;pointer-events:none;z-index:0;';
       card.style.position = 'relative';
       card.style.overflow = 'hidden';
       card.appendChild(ripple);
       setTimeout(() => ripple.remove(), 600);
     });
 
-    const s = document.createElement('style');
-    s.textContent = '@keyframes rippleEffect{to{transform:scale(2.5);opacity:0}}';
-    document.head.appendChild(s);
+    var _rs = document.createElement('style');
+    _rs.textContent = '@keyframes rippleEffect{to{transform:scale(2.5);opacity:0}}';
+    document.head.appendChild(_rs);
   </script>
 
 </body>
